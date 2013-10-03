@@ -7,7 +7,14 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    sort = params[:sort] || session[:sort]
+    case sort
+    when 'title'
+      ordering, @title_header = {:order => :title}, 'hilite'
+    when 'release_date'
+      ordering, @date_header = {:order => :release_date}, 'hilite'
+    end
+    @movies = Movie.find(:all, :order => sort ? sort : id)
   end
 
   def new
